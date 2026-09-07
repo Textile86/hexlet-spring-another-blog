@@ -6,12 +6,18 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
 @Table(name = "posts")
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id
@@ -26,4 +32,11 @@ public class Post {
     private String content;
     private String author;
     private boolean published;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

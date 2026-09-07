@@ -5,6 +5,10 @@ import io.hexlet.spring.model.Post;
 import io.hexlet.spring.repository.PostRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +23,19 @@ public class PostController {
     private PostRepository postRepository;
 
     @GetMapping
-    public ResponseEntity<List<Post>> index() {
-        List<Post> result = postRepository.findAll();
-        return ResponseEntity.ok(result);
+    public Page<Post> getPublishedPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort) {
+
+        String[] parts = sort.split(",");
+        String property = parts[0].trim();
+        Sort.Direction direction = (parts.length > 1 && "asc".equalsIgnoreCase(parts[1].trim()))
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, property));
+        return postRepository.findByPublishedTrue(pageable);
     }
 
     @PostMapping
