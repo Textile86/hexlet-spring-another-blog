@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # секрет добавьте в Settings -> Secrets and variables -> Actions (Name: SONAR_TOKEN)
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "24"
+
+      - name: Cache Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build & Test
+        run: ./gradlew clean build
+
+      - name: Coverage report
+        run: ./gradlew jacocoTestReport
+
+      - name: SonarQube Scan
+        # шаг выполняется только если в репозитории заведён секрет SONAR_TOKEN
+        if: env.SONAR_TOKEN != ''
+        run: ./gradlew sonar

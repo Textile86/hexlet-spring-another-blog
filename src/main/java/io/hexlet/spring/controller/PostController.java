@@ -56,7 +56,6 @@ public class PostController {
                 .orElseThrow(() -> new ResourceNotFoundException("Post " + id + " not found"));
         post.setTitle(data.getTitle());
         post.setContent(data.getContent());
-        post.setAuthor(data.getAuthor());
         post.setPublished(data.isPublished());
         return postRepository.save(post);
     }

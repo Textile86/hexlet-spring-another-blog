@@ -29,8 +29,8 @@ public class Post {
     private String title;
 
     @NotBlank(message = "Content is required")
+    @Column(columnDefinition = "TEXT")
     private String content;
-    private String author;
     private boolean published;
 
     @CreatedDate
@@ -39,4 +39,8 @@ public class Post {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
