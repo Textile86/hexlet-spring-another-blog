@@ -15,7 +15,7 @@ public class PostCreateDTO {
     private String title;
 
     @NotBlank
-    @Size(min = 10)
+    @Size(min = 10, max = 1000)
     private String content;
 
     @NotNull(message = "UserId is required")

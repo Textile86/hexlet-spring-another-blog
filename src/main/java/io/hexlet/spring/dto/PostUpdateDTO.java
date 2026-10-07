@@ -14,7 +14,7 @@ public class PostUpdateDTO {
     private String title;
 
     @NotBlank
-    @Size(min = 10)
+    @Size(min = 10, max = 1000)
     private String content;
 
     /** null (или отсутствует в JSON) = не менять значение в БД */

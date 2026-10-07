@@ -25,12 +25,14 @@ public class Post {
     private Long id;
 
     @NotBlank(message = "Title is required")
-    @Size(max = 100, message = "Title must be at most 100 characters")
+    @Size(min = 3, max = 100, message = "Title must be 3 - 100 characters")
     private String title;
 
     @NotBlank(message = "Content is required")
     @Column(columnDefinition = "TEXT")
+    @Size(min = 10, max = 1000)
     private String content;
+
     private boolean published;
 
     @CreatedDate
